@@ -1,0 +1,5 @@
+server/node_modules/
+web/node_modules/
+mobile/node_modules/
+server/public/uploads/*
+mobile/.expo/
