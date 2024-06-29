@@ -12,5 +12,5 @@ export default (props) => {
 
   // let style = styles[type || 'list'];
 
-  return <Image source={source} style={style} resizeMode='contain' />
+  return <Image source={source} style={style} resizeMode='cover' />
 };

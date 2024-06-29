@@ -9,10 +9,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
-import { Loader } from "./component";
-import { Auth, Strings } from "./config";
+import { Loader } from "./components";
+import { Auth, Colors, Strings } from "./config";
 import { ChatProvider } from './context/ChatProvider';
 import ChatScreen from './screens/ChatScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -24,18 +25,18 @@ export default function App() {
     const authenticated =  await Auth.auth()
     if(authenticated) setIsSignedIn(authenticated)
   }
-  _auth()
 
-  useEffect(() => {
+const _getFonts = async () => {
+  await Font.loadAsync({
+    'noto-font' : require('./assets/fonts/NotoKufiArabic-Regular.ttf')
+  })
+  setIsLoading(false)
+}
+
+useEffect(() => {
+    _auth()
     _getFonts()
-    setIsLoading(false)
   }, [])
-  
-  const _getFonts = async () => {
-    await Font.loadAsync({
-      'noto-font' : require('./assets/fonts/NotoKufiArabic-Regular.ttf')
-    })
-  }
   
   if (isLoading) return (
     <Loader title={Strings.PLEASE_WAIT} loading={isLoading} />
@@ -46,7 +47,8 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
-            headerShown: false
+            headerShown: false,
+            navigationBarColor: Colors.WHITE
           }}
         >
           <Stack.Screen name='Login' component={LoginScreen}/>
@@ -59,6 +61,13 @@ export default function App() {
             }}
           />
           <Stack.Screen name='Chat' component={ChatScreen} 
+            options={{
+              // gestureEnabled: false,
+              // headerShown: true,
+              // headerLeft: () => <></>,
+            }}
+          />
+          <Stack.Screen name='Profile' component={ProfileScreen} 
             options={{
               // gestureEnabled: false,
               // headerShown: true,

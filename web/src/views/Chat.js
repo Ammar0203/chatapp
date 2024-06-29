@@ -63,7 +63,7 @@ export default function Chat() {
                     user,
                     contacts,
                     messages,
-                    contact: contacts[0]
+                    contact: null
                 }
             })
         })
@@ -146,7 +146,14 @@ export default function Chat() {
     }
 
     function renderChat() {
-        if(!state.contact) return;
+        if(!state.contact) return (
+            <>
+                <ChatHeader contact={state.contact} typing={state.typing} toggle={userProfileToggle} />
+                <div style={{display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+                    <div>اختر احد للتحدث اليه</div>
+                </div>
+            </>
+        );
         
         return (
             <Fragment>

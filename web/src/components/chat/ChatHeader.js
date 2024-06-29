@@ -13,18 +13,21 @@ const ChatHeader = props => {
     }
 
     function status() {
-        if(props.typing) return 'يكتب الان'
-        if(props.contact.status == true) return 'متصل الان'
-        if(props.contact.status) return moment(props.contact.status).fromNow()
+        if(props.typing) return 'يكتب الان...'
+        if(props.contact?.status == true) return 'متصل الان'
+        if(props.contact?.status) {
+            if(moment(props.contact.status).format("Do MMM YYYY") == moment().format("Do MMM YYYY")) return `اخر ظهور ${moment(props.contact.status).format('h:mm a')}`
+            return `اخر ظهور ${moment(props.contact.status).format('Do MMM YYYY')}`
+        }
     }
 
     return (
         <Row className="heading m-0">
             <div onClick={props.toggle}>
-                <Avatar src={props.contact.avatar} />
+                <Avatar src={props.contact?.avatar} />
             </div>
             <div className="text-right">
-                <div>{props.contact ? props.contact.name : ''}</div>
+                <div>{props.contact ? props.contact?.name : ''}</div>
                 <small>{status()}</small>
            </div>
             <Nav className="mr-auto" navbar>

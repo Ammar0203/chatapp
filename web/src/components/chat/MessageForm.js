@@ -35,7 +35,7 @@ const MessageForm = props => {
 
   return (
     <div id="send-message">
-        <Input type="textarea" rows="1" onChange={onChange} onKeyDown={onKeyDown} onInput={onInput} value={message} placeholder="اكتب رسالتك هنا"/>
+        <Input type="textarea" rows="1" onChange={onChange} onKeyDown={onKeyDown} onInput={onInput} value={message} placeholder="اكتب رسالتك هنا" style={{overflow: 'hidden'}}/>
         <i className="fa fa-send text-muted px-3 send" onClick={onSend}/>
     </div>
   );

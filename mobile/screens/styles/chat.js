@@ -17,7 +17,7 @@ const useStyle = ({ width, height }) => {
     headerContainer: {
       // position: 'absolute',
       // zIndex: 1,
-      top: 0,
+      // top: 0,
       backgroundColor: Colors.GRAY,
       width: width,
       alignItems: 'center', 
@@ -25,7 +25,7 @@ const useStyle = ({ width, height }) => {
     header: {
       backgroundColor: Colors.GRAY,
       height: height*0.1,
-      width: width,
+      width: w(100),
       flexDirection: 'row',
       justifyContent: 'flex-end',
       paddingHorizontal: h(2),
@@ -79,7 +79,7 @@ const useStyle = ({ width, height }) => {
     },
     inputContainer: {
       flexDirection: 'row',
-      flex: 1,
+      // flex: 1,
       backgroundColor: Colors.WHITE,
       paddingHorizontal: 10,
     },

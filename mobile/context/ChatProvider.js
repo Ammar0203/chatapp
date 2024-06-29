@@ -25,8 +25,10 @@ export function ChatProvider(props) {
     socket?.on('disconnect', () => setState((prev) => {return {...prev, connected: false}}))
     socket?.on('data', onData)
     socket?.on('user_status', updateUsersState)
-    // socket?.on('typing', onTypingMessage)
+    socket?.on('typing', onTypingMessage)
     socket?.on('message', onNewMessage)
+    socket?.on('new_user', onNewUser)
+    socket?.on('update_user', onUpdateUser)
 
     return () => {
       socket?.off('connect')
@@ -35,6 +37,8 @@ export function ChatProvider(props) {
       socket?.off('user_status')
       socket?.off('message')
       socket?.off('typing')
+      socket?.off('new_user')
+      socket?.off('update_user')
     }
   }, [state])
   
@@ -80,6 +84,7 @@ export function ChatProvider(props) {
 
   function onNewMessage(message) {
     const { socket, contact, messages } = state
+    if(!messages) messages = [];
     if(message.sender === contact.id) {
       setState(prev => {return {...prev, typing: false}})
       socket.emit('seen', contact.id)
@@ -121,7 +126,28 @@ export function ChatProvider(props) {
     let status = contact.status
     if(typing) return Strings.WRITING_NOW
     if(status == true) return Strings.ONLINE
-    if(status) return moment(status).fromNow()
+    if(status) {
+      if(moment(status).format("Do MMM YYYY") == moment().format("Do MMM YYYY")) return `اخر ظهور ${moment(status).format('h:mm a')}`
+      return `اخر ظهور ${moment(status).format('Do MMM YYYY')}`
+    }
+  }
+
+  function onNewUser(user) {
+    const contacts = state.contacts.concat(user)
+    setState(prev => { return {...prev, contacts} })
+  }
+
+  function onUpdateUser(user) {
+    if(state.user.id === user.id) {
+        setState(prev => { return {...prev, user} })
+        return;
+    }
+    let contacts = state.contacts.map(contact => {
+        if(contact.id === user.id) contact = user
+        return contact
+    })
+    setState(prev => { return {...prev, contacts} })
+    if(state.contact.id === user.id) setState(prev => { return {...prev, contact: user} })
   }
 
   return (

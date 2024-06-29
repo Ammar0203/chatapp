@@ -1,12 +1,13 @@
-import { Platform, useWindowDimensions, StatusBar, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Image } from 'react-native'
+import { Platform, useWindowDimensions, StatusBar, View, TouchableOpacity, TextInput, KeyboardAvoidingView, Image, Text } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
-import { ChatHeader } from '../component'
+import { ChatHeader, Chat } from '../components'
 import useStyle from './styles/chat'
 import { useHeight, useWidth } from '../api/Dimensions'
 import { withChatContext } from '../context/ChatProvider'
 import { GiftedChat, InputToolbar } from 'react-native-gifted-chat'
 import { Colors, Strings } from '../config'
 import moment from 'moment'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 function ChatScreen({ navigation, chat, route }) {
   const window = useWindowDimensions()
@@ -15,12 +16,15 @@ function ChatScreen({ navigation, chat, route }) {
   const w = useWidth(window.width)
 
   const textRef = useRef(null)
+  const [text, setText] = useState('')
   const lastTypeRef = useRef(false)
 
+  // it fixs a problem when opening a chat in web
   const [r, re] = useState(false)
   if(Platform.OS === 'web' && !r) {
     setTimeout(() => re(!r), 50)
   }
+  // 
 
   useEffect(() => {
     return () => {
@@ -29,15 +33,15 @@ function ChatScreen({ navigation, chat, route }) {
   }, [])
 
   function onSend() {
-    let content = textRef?.current?.trim()
+    let content = text?.trim()
     if(!content) return
     chat.sendMessage(content)
     lastTypeRef.current = false
-    textRef.current = ''
+    setText('')
   }
 
   function onMessageChange(message) {
-    textRef.current = message
+    setText(message)
     let lastType = lastTypeRef.current
     if(!lastType || moment() - lastType > 2000){
       lastType = moment()
@@ -51,48 +55,56 @@ function ChatScreen({ navigation, chat, route }) {
     } 
   };
 
-  let { account, contact } = chat
-  let messages = chat.messages.filter(
-    e => e.sender === contact.id || e.receiver === contact.id
-  )
+  function addNewLine() {
+    setText(Text + '\n')
+  }
 
-  const CustomInputToolbar = (props) => {
-    return (
-      <View style={styles.inputContainer}>
-        <TouchableOpacity style={styles.iconContainer}>
-          {/* Your icon or component goes here */}
-        </TouchableOpacity>
-        <TextInput
-          style={styles.input}
-          placeholder={Strings.WRITE_YOUR_MESSAGE}
-          placeholderTextColor="#A0A0A0"
-          multiline
-          onKeyPress={onKeyDown}
-          onChangeText={onMessageChange}
-          {...props.textInputProps}
-        />
-        <TouchableOpacity style={styles.sendContainer} onPress={onSend}>
-          {/* Your send icon or component goes here */}
-          <Image source={require('../assets/images/sendIcon.png')} resizeMode='contain' style={{height: h(4), width: h(4)}} />
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  // let { account, contact } = chat
+  // let messages = chat.messages.filter(
+  //   e => e.sender === contact.id || e.receiver === contact.id
+  // )
+
+  // const CustomInputToolbar = (props) => {
+  //   return (
+  //     <View style={styles.inputContainer}>
+  //       <TouchableOpacity style={styles.iconContainer}>
+  //         {/* Your icon or component goes here */}
+  //       </TouchableOpacity>
+  //       <TextInput
+  //         style={styles.input}
+  //         placeholder={Strings.WRITE_YOUR_MESSAGE}
+  //         placeholderTextColor="#A0A0A0"
+  //         multiline
+  //         onKeyPress={onKeyDown}
+  //         onChangeText={onMessageChange}
+  //         {...props.textInputProps}
+  //       />
+  //       <TouchableOpacity style={styles.sendContainer} onPress={onSend}>
+  //         {/* Your send icon or component goes here */}
+  //         <Image source={require('../assets/images/sendIcon.png')} resizeMode='contain' style={{height: h(4), width: h(4)}} />
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // };
 
 
   return (
     <>
       <StatusBar backgroundColor={Colors.GRAY} barStyle='light-content' />
-      <ChatHeader navigation={navigation}/>
-      <GiftedChat 
-        user={{_id: account.id}}
-        messages={messages.reverse()}
-        renderAvatar={null}
-        renderInputToolbar={(props) => <CustomInputToolbar {...props} />}
-        messagesContainerStyle={{backgroundColor: 'white'}}
-        onSend={onSend}
-      />
+      <SafeAreaView style={{flex: 1}}>
+          <ChatHeader navigation={navigation}/>
+          <Chat chat={chat} onSend={onSend} onMessageChange={onMessageChange} onKeyDown={onKeyDown} text={text} addNewLine={addNewLine} />
+          {/* <GiftedChat 
+            user={{_id: account.id}}
+            messages={messages.reverse()}
+            renderAvatar={null}
+            renderInputToolbar={(props) => <CustomInputToolbar {...props} />}
+            messagesContainerStyle={{backgroundColor: 'white'}}
+            onSend={onSend}
+            /> */}
+      </SafeAreaView>
     </>
   )
 }
+
 export default withChatContext(ChatScreen)

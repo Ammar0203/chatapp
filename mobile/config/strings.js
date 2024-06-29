@@ -10,7 +10,7 @@ const strings = {
   // Buttons
   LOGIN: "تسجيل الدخول",
   SEND: "إرسال",
-  BACK_TO_LOGIN: "رجوع",
+  BACK_TO_LOGIN: "انتقال الى تسجيل الدخول",
   CREATE_NEW_ACCOUNT: "إنشاء حساب جديد",
   CHANGE_PASSWORD: "تغيير كلمة المرور",
   LOGOUT: "تسجيل الخروج",
@@ -36,7 +36,7 @@ const strings = {
   MENU: "الخيارات",
   CLICK_HERE_TO_START_CHAT: "انقر هنا لبدء المحادثة",
   WRITE_YOUR_MESSAGE: "اكتب رسالتك هنا",
-  WRITING_NOW: "يكتب الآن",
+  WRITING_NOW: "يكتب الآن...",
   ONLINE: "متصل الآن",
   DEFAULT_STATUS_MESSAGE: "أهلًا، أنا أستعمل محادثة حسوب",
   PASSWORD_CHANGED: "تم تغيير كلمة المرور بنجاح",

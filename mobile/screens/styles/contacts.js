@@ -34,14 +34,15 @@ const useStyle = ({ width, height }) => {
     },
     headerText: {
       fontSize: h(2.4),
+      paddingHorizontal: h(1),
       color: Colors.WHITE,
       fontWeight: 'bold'
     },
     contactContainer: {
       width: w(100),
       height: h(10),
-      borderBottomWidth: h(0.1),
-      borderColor: Colors.GRAY,
+      // borderBottomWidth: h(0.1),
+      // borderColor: Colors.GRAY,
       flexDirection: 'row-reverse',
       padding: h(1),
       backgroundColor: Colors.WHITE
@@ -119,7 +120,7 @@ const useStyle = ({ width, height }) => {
     },
     searchIconContainer: {
       height: h(10),
-      width: h(10),
+      width: w(13),
       justifyContent: 'center',
       alignItems: 'center'
     },
@@ -130,10 +131,11 @@ const useStyle = ({ width, height }) => {
       alignItems: 'center',
     },
     search: {
+      borderRadius: 7,
       backgroundColor: Colors.WHITE,
       textAlign: 'right',
       height: h(5),
-      width: w(70),
+      width: w(74),
       color: Colors.BLACK,
       paddingHorizontal: h(1),
       fontSize: h(2.3)

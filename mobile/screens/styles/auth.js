@@ -35,7 +35,6 @@ const useStyle = ({ width, height }) => {
     imageHeaderContainer: {
       backgroundColor: "#616571",
       paddingVertical: h(7),
-      justifyContent: 'center',
       alignItems: 'center'
     },
     imageHeaderStyle: {

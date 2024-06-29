@@ -29,7 +29,7 @@ async function onSocketConnected(socket) {
       [socket.user.id]: true
     })
   }
-  console.log('New client connected: ' + socket.user.username + ' |id: ' + socket.user.id)
+  // console.log('New client connected: ' + socket.user.username + ' |id: ' + socket.user.id)
 }
 
 async function onSocketDisconnected(socket) {
@@ -41,7 +41,7 @@ async function onSocketDisconnected(socket) {
       [socket.user.id]: lastSeen
     })
   }
-  console.log('Client disconnected: '+ socket.user.username + ' |id: ' + socket.user.id)
+  // console.log('Client disconnected: '+ socket.user.username + ' |id: ' + socket.user.id)
 }
 
 async function onMessage(socket, data) {
