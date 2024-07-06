@@ -41,7 +41,7 @@ export default function Login() {
                 <h5 className="mb-4">تسجيل دخول</h5>
                 <Error error={error} />
                 <Input value={username} name="username" onChange={onChange} placeholder=" الاسم المستخدم" required/>
-                <Input value={password} name="password" onChange={onChange} placeholder="كلمة السر" required />
+                <Input value={password} name="password" type="password" onChange={onChange} placeholder="كلمة السر" required />
                 <Button color="primary" block className="mb-3">دخول</Button>
                 <small><Link to="/register">انشاء حساب جديد</Link></small>
                 <p className="m-3 text-muted">&copy; 2018-2019</p>

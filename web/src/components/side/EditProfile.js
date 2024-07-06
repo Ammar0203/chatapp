@@ -47,6 +47,8 @@ function EditProfile(props) {
         const data = new FormData();
         data.append('name', state.name);
         data.append('about', state.about);
+        console.log(state.avatar)
+        console.log(state.avatar.name)
         if (state.avatar) data.append('avatar', state.avatar, state.avatar.name);
         axios.post('/api/account', data)
         .then(props.toggle)

@@ -27,7 +27,7 @@ export default function Contact({ contact, onClick }) {
 
           <View style={styles.nameMessage}>
             <Text style={styles.name}>{name}</Text>
-            <Text style={styles.message}>{content || Strings.CLICK_HERE_TO_START_CHAT}</Text>
+            <Text style={styles.message} numberOfLines={1}>{content || Strings.CLICK_HERE_TO_START_CHAT}</Text>
           </View>
 
           <View style={styles.timeLastMessageContainer}>

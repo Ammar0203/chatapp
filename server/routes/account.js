@@ -13,7 +13,7 @@ const multer  = require('multer');
 const storage = multer.diskStorage({
     destination: 'public/uploads/',
     filename: function (req, file, cb) {
-        cb(null, Date.now() + path.extname(file.originalname))
+        cb(null, Date.now() + Math.random().toFixed(5).slice(2))
     }
 });
 
@@ -23,8 +23,8 @@ const upload = multer({
     fileFilter: (req, file, cb) => {
         let fileTypes = /jpeg|jpg|png/;
         let mimeType = fileTypes.test(file.mimetype);
-        let extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-        if (mimeType && extname)  return cb(null, true);
+        // let extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+        if (mimeType)  return cb(null, true);
         cb(new Error('غبر مسموح رفع هذا الملف'));
     },
 });

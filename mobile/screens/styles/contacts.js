@@ -29,7 +29,7 @@ const useStyle = ({ width, height }) => {
       backgroundColor: Colors.GRAY,
       height: h(10),
       width: w(100),
-      justifyContent: 'flex-end',
+      justifyContent: 'space-between',
       alignItems: 'center',
     },
     headerText: {
@@ -68,7 +68,8 @@ const useStyle = ({ width, height }) => {
     message: {
       color: Colors.GRAY,
       fontSize: h(1.8),
-      textAlign: 'right'
+      textAlign: 'right',
+      width: w(50),
     },
     contactLeft: {
       flex: 1,

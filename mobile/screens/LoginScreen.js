@@ -3,15 +3,17 @@ import {
   Image,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
   Pressable,
   SafeAreaView,
   ScrollView,
+  StatusBar,
   Text,
   TextInput,
   View,
   useWindowDimensions,
 } from "react-native";
-import { Auth, Axios, Strings, Urls } from "../config";
+import { Auth, Axios, Colors, Strings, Urls } from "../config";
 import companyLogo from "../assets/images/logo.png";
 import useStyle from "./styles/auth";
 import { useWidth, useHeight } from "../api/Dimensions";
@@ -31,16 +33,13 @@ export default function LoginScreen({ navigation, route }) {
 
   useEffect(() => {
     _bootstrapAsync();
-  }, []);
+  }, [navigation]);
 
   const _bootstrapAsync = async () => {
     const authenticated = await Auth.auth();
     if (authenticated) {
-      // await navigation.navigate("Home");
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Home'}, { name: "Chat"}, { name: "Profile"}],
-      });
+      setIsLoading(false)
+      await navigation.navigate("Home");
     } else setIsLoading(false);
   };
 
@@ -64,6 +63,7 @@ export default function LoginScreen({ navigation, route }) {
   };
 
   const login = async () => {
+    setError(null)
     if (!validate()) return;
 
     let data = {
@@ -89,6 +89,7 @@ export default function LoginScreen({ navigation, route }) {
     style={{ flex: 1 }}
     behavior={Platform.OS === "ios" ? "padding" : "height"}
     >
+      <StatusBar backgroundColor={Colors.GRAY} barStyle='light-content' />
       <Loader title={Strings.PLEASE_WAIT} loading={isLoading} />
       <ScrollView style={styles.container} keyboardShouldPersistTaps='handled'>
         <View style={styles.imageHeaderContainer}>

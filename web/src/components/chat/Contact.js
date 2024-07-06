@@ -15,7 +15,7 @@ return(
 
       <div className='name'>{props.contact.name}</div>
 
-      <div className='small laast-message'>
+      <div className='small laast-message' style={{textOverflow: 'ellipsis', width: '100%', whiteSpace: 'nowrap', overflow: 'hidden'}}>
         {props.message ? props.message.content : 'انقر هنا لبدء المحادثة' }
       </div>
 

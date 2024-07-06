@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from "react";
 import {
   Image,
   KeyboardAvoidingView,
@@ -9,12 +9,12 @@ import {
   View,
   useWindowDimensions,
   Keyboard,
-  Platform
-} from 'react-native';
+  Platform,
+} from "react-native";
 import useStyle from "../screens/styles/chat";
 import { useHeight, useWidth } from "../api/Dimensions";
 import { Colors, Strings } from "../config";
-import moment from 'moment';
+import moment from "moment";
 
 function Chat({ chat, onSend, onMessageChange, onKeyDown, text, addNewLine }) {
   const window = useWindowDimensions();
@@ -28,7 +28,7 @@ function Chat({ chat, onSend, onMessageChange, onKeyDown, text, addNewLine }) {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      'keyboardDidShow',
+      "keyboardDidShow",
       (e) => handleKeyboardDidShow(e)
     );
     // const keyboardDidHideListener = Keyboard.addListener(
@@ -43,27 +43,30 @@ function Chat({ chat, onSend, onMessageChange, onKeyDown, text, addNewLine }) {
   }, []);
 
   const handleKeyboardDidShow = (e) => {
-    console.log("Keyboard did show, restoring scroll position:", scrollOffset.current);
-    console.log('Keyboards height:', e.endCoordinates.height)
+    // console.log("Keyboard did show, restoring scroll position:", scrollOffset.current);
+    // console.log('Keyboards height:', e.endCoordinates.height)
     setTimeout(() => {
-      scrollRef.current.scrollTo({ y: scrollOffset.current + e.endCoordinates.height, animated: true });
-    }, 100)
+      scrollRef.current.scrollTo({
+        y: scrollOffset.current + e.endCoordinates.height,
+        animated: true,
+      });
+    }, 100);
   };
 
   // const handleKeyboardDidHide = () => {
-    // if (isAtBottom) {
-    //   console.log("Keyboard did hide, scrolling to end");
-    //   scrollRef.current.scrollToEnd({ animated: true });
-    // }
+  // if (isAtBottom) {
+  //   console.log("Keyboard did hide, scrolling to end");
+  //   scrollRef.current.scrollToEnd({ animated: true });
+  // }
   // };
 
   const handleContentSizeChange = () => {
     if (
       isAtBottom ||
-      chat.messages[chat.messages.length - 1].sender === chat.account.id
+      chat.messages[chat.messages.length - 1].sender === chat.user.id
     ) {
-      console.log("Content size changed, scrolling to end");
-      scrollRef.current.scrollToEnd({ animated: true });
+      // console.log("Content size changed, scrolling to end");
+      scrollRef.current.scrollToEnd({ animated: false });
     }
   };
 
@@ -73,7 +76,7 @@ function Chat({ chat, onSend, onMessageChange, onKeyDown, text, addNewLine }) {
       layoutMeasurement.height + contentOffset.y >= contentSize.height - 20; // Adjust the threshold as needed
     setIsAtBottom(isBottom);
     scrollOffset.current = contentOffset.y;
-    console.log("Scroll offset:", contentOffset.y, "Is at bottom:", isBottom);
+    // console.log("Scroll offset:", contentOffset.y, "Is at bottom:", isBottom);
   };
 
   function NewDay({ date, children }) {
@@ -81,9 +84,7 @@ function Chat({ chat, onSend, onMessageChange, onKeyDown, text, addNewLine }) {
       <>
         <View style={{ alignItems: "center", margin: h(2) }}>
           <Text style={{ fontSize: h(2), color: Colors.GRAY }}>
-            {date === moment().format("Do MMM YYYY")
-              ? "اليوم"
-              : date}
+            {date === moment().format("Do MMM YYYY") ? "اليوم" : date}
           </Text>
         </View>
         {children}
@@ -91,63 +92,58 @@ function Chat({ chat, onSend, onMessageChange, onKeyDown, text, addNewLine }) {
     );
   }
 
-  function OutcommingMessage({ message }) {
+  function Message({ message }) {
     return (
       <View
-        style={{
-          backgroundColor: Colors.LIGHTGRAY,
-          alignSelf: "flex-start",
-          marginHorizontal: w(3.5),
-          marginVertical: h(1),
-          marginRight: h(3),
-          paddingHorizontal: w(2),
-          paddingVertical: h(1),
-          borderRadius: 10,
-        }}
+        style={[
+          {
+            backgroundColor:
+              message.sender === chat.contact.id
+                ? Colors.LIGHTGRAY
+                : Colors.BLUE,
+            alignSelf:
+              message.sender === chat.contact.id ? "flex-start" : "flex-end",
+            marginHorizontal: w(3.5),
+            marginVertical: h(1),
+            marginRight: h(3),
+            paddingHorizontal: w(2),
+            paddingVertical: h(1),
+            borderRadius: 10,
+            maxWidth: w(85),
+          },
+          message.sender === chat.contact.id
+            ? { marginRight: h(3) }
+            : { marginLeft: h(3) },
+        ]}
       >
-        <Text style={{ fontSize: h(2.4), color: Colors.BLACK }}>
+        <Text
+          style={{
+            fontSize: h(2.4),
+            color:
+              message.sender === chat.contact.id ? Colors.BLACK : Colors.WHITE,
+            flexWrap: "wrap",
+          }}
+        >
           {message.content}
         </Text>
         <View
           style={{
-            alignSelf: "flex-start",
+            alignSelf:
+              message.sender === chat.contact.id ? "flex-start" : "flex-end",
             marginHorizontal: h(0.5),
             marginTop: h(0.5),
           }}
         >
-          <Text style={{ fontSize: h(1.9), color: Colors.BLACK, opacity: 0.8 }}>
-            {moment(message.date).format("h:mm a")}
-          </Text>
-        </View>
-      </View>
-    );
-  }
-
-  function IncommingMessage({ message }) {
-    return (
-      <View
-        style={{
-          backgroundColor: Colors.BLUE,
-          alignSelf: "flex-end",
-          marginHorizontal: w(3.5),
-          marginVertical: h(1),
-          marginLeft: h(3),
-          paddingHorizontal: w(2),
-          paddingVertical: h(1),
-          borderRadius: 10,
-        }}
-      >
-        <Text style={{ fontSize: h(2.4), color: Colors.WHITE }}>
-          {message.content}
-        </Text>
-        <View
-          style={{
-            alignSelf: "flex-end",
-            marginHorizontal: h(0.5),
-            marginTop: h(0.5),
-          }}
-        >
-          <Text style={{ fontSize: h(1.9), color: Colors.WHITE, opacity: 0.9 }}>
+          <Text
+            style={{
+              fontSize: h(1.9),
+              color:
+                message.sender === chat.contact.id
+                  ? Colors.BLACK
+                  : Colors.WHITE,
+              opacity: 0.8,
+            }}
+          >
             {moment(message.date).format("h:mm a")}
           </Text>
         </View>
@@ -164,7 +160,7 @@ function Chat({ chat, onSend, onMessageChange, onKeyDown, text, addNewLine }) {
     const groupMessagesByDate = (messages) => {
       return messages.reduce((acc, message) => {
         // const date = new Date(message.date).toDateString();
-        const date = moment(message.date).format('Do MMM YYYY')
+        const date = moment(message.date).format("Do MMM YYYY");
         if (!acc[date]) {
           acc[date] = [];
         }
@@ -180,11 +176,7 @@ function Chat({ chat, onSend, onMessageChange, onKeyDown, text, addNewLine }) {
           <NewDay date={date} key={date}>
             {groupedMessages[date].map((message, index) => (
               <View key={message.date + index}>
-                {message.sender === chat.contact.id ? (
-                  <OutcommingMessage message={message} key={message.date + "-incoming"} />
-                ) : (
-                  <IncommingMessage message={message} key={message.date + "-outgoing"} />
-                )}
+                <Message message={message} key={message.date + "-incoming"} />
               </View>
             ))}
           </NewDay>
@@ -244,14 +236,14 @@ function Chat({ chat, onSend, onMessageChange, onKeyDown, text, addNewLine }) {
             placeholderTextColor="#A0A0A0"
             multiline
             style={{
-              overflow: 'hidden',
+              overflow: "hidden",
               width: w(85),
               height: h(7),
               padding: h(1),
               textAlign: "right",
             }}
             onFocus={() => {
-              console.log("TextInput focused, current scroll offset:", scrollOffset);
+              // console.log("TextInput focused, current scroll offset:", scrollOffset);
             }}
             onChangeText={(text) => onMessageChange(text)}
             onKeyPress={(e) => onKeyDown(e)}

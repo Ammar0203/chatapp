@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 import { useWidth, useHeight } from '../../api/Dimensions'
+import { Colors } from "../../config";
 
 const useStyle = ({ width, height }) => {
   const w = useWidth(width)
@@ -7,7 +8,8 @@ const useStyle = ({ width, height }) => {
 
   const styles = StyleSheet.create({
     container: {
-      flex: 1
+      flex: 1,
+      backgroundColor: Colors.WHITE
     },
     textInputContainer: {
       height: 45,
@@ -45,7 +47,8 @@ const useStyle = ({ width, height }) => {
       alignItems: 'center',
       textAlign: 'center',
       gap: h(2),
-      fontWeight: 'bold'
+      fontWeight: 'bold',
+      height: h(60)
     },
     formTextHeader: {
       color: "#616571",

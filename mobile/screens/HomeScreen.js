@@ -1,6 +1,6 @@
-import { Platform, View, useWindowDimensions, ScrollView, BackHandler, StatusBar } from 'react-native'
+import { Platform, View, useWindowDimensions, ScrollView, BackHandler, StatusBar, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Colors, Strings } from '../config'
+import { Auth, Colors, Strings } from '../config'
 import { useEffect, useState } from 'react'
 import { Contacts, HomeHeader, Loader } from '../components'
 import useStyle from './styles/contacts'
@@ -23,7 +23,18 @@ function HomeScreen({ navigation, chat }) {
   
   useEffect(() => {
     if(chat.contacts) {setIsLoading(false)}
+    chat.socket?.on('error', onSocketError)
+    return () => {
+      chat.socket?.off('error')
+    }
   }, [chat])
+  
+  function onSocketError(error) {
+    if (error === 'auth_error') {
+      Auth.logout()
+      navigation.navigate('Login')
+    }
+  }
   
   function onContactClick(contact) {
     chat.setCurrentContact(contact)
@@ -60,13 +71,15 @@ function HomeScreen({ navigation, chat }) {
   //   })
   // }
 
-  // useEffect(() => {
-  //   const preventBack = navigation.addListener('beforeRemove', (e) => {
-  //     e.preventDefault()
-  //   })
-  //   return preventBack
-  // }, [navigation])
-
+  useEffect(() => {
+    const preventBack = navigation.addListener('beforeRemove', (e) => {
+      // chat.logout()
+      if(!chat.connected) return;
+      e.preventDefault()
+    })
+    return preventBack
+  }, [navigation, chat])
+  
   return (
     <>
       <StatusBar backgroundColor={Colors.GRAY} barStyle='light-content' />

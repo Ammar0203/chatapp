@@ -28,28 +28,26 @@ export default function HomeHeader({ navigation, search, setSearch }) {
       <View style={styles.header}>
         {!isSearching ? (
           <>
-            <TouchableOpacity
-              onPress={() => {
-                Auth.logout();
-                navigation.reset({
-                  index: 0,
-                  routes: [{ name: "Login" }, { name: "Register"}],
-                });
-              }}
-            >
-              <Text>تسجيل الخروج</Text>
-            </TouchableOpacity>
+            <View style={{height: h(10), width: w(13), justifyContent: 'center', alignItems: 'center'}}>
+              <TouchableOpacity onPress={() => {navigation.navigate('Edit')}} style={{height: h(1.8), justifyContent: 'space-between'}}>
+                <View style={{height: h(0.3), width: h(2.4), backgroundColor: Colors.WHITE}} />
+                <View style={{height: h(0.3), width: h(2.4), backgroundColor: Colors.WHITE}} />
+                <View style={{height: h(0.3), width: h(2.4), backgroundColor: Colors.WHITE}} />
+              </TouchableOpacity>
+            </View>
             <Text style={styles.headerText}>{Strings.TITLE_CONTACTS}</Text>
           </>
         ) : (
           <>
             <View style={styles.searchIconContainer}>
-              <TouchableOpacity onPress={() => setIsSearching(false)}>
-                <Image
+              <TouchableOpacity onPress={() => setIsSearching(false)} style={{height: h(2), width: h(3), justifyContent: 'center', alignItems: 'center', position: 'relative'}}>
+                {/* <Image
                   source={require("../assets/images/xIcon.png")}
                   style={styles.xIcon}
                   resizeMode="contain"
-                />
+                /> */}
+                <View style={{height: h(0.3), width: h(2.4), backgroundColor: Colors.WHITE, transform: [{rotateZ: '45deg'}], position: 'absolute'}} />
+                <View style={{height: h(0.3), width: h(2.4), backgroundColor: Colors.WHITE, transform: [{rotateZ: '-45deg'}], position: 'absolute'}} />
               </TouchableOpacity>
             </View>
             <TextInput
@@ -62,15 +60,13 @@ export default function HomeHeader({ navigation, search, setSearch }) {
           </>
         )}
 
-        <View style={styles.searchIconContainer}>
-          <TouchableOpacity onPress={() => setIsSearching(true)}>
-            <Image
-              source={require("../assets/images/search.png")}
-              style={styles.searchIcon}
-              resizeMode="contain"
-            />
-          </TouchableOpacity>
-        </View>
+        <TouchableOpacity onPress={() => setIsSearching(true)} style={styles.searchIconContainer}>
+          <Image
+            source={require("../assets/images/search.png")}
+            style={styles.searchIcon}
+            resizeMode="contain"
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );

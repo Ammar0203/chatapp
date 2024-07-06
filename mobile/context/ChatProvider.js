@@ -12,7 +12,7 @@ export function ChatProvider(props) {
     contact: null,
     contacts: null,
     messages: null,
-    account: null,
+    user: null,
     typing: false
   })
 
@@ -50,11 +50,11 @@ export function ChatProvider(props) {
 
   function onData({user, contacts, messages}) {
     messages = messages.map(formatMessage)
-    setState((prev) => {return {...prev, account: user, contacts, messages}})
+    setState((prev) => {return {...prev, user: user, contacts, messages}})
   }
 
   function updateUsersState(statusId) {
-    let contacts = state.contacts.map((contact) => {
+    let contacts = state.contacts?.map((contact) => {
         if(statusId[contact.id]) contact.status = statusId[contact.id]
         return contact
     })
@@ -64,7 +64,7 @@ export function ChatProvider(props) {
   }
 
   function setCurrentContact(contact) {
-    if(!contact || !contact.id) return
+    if(!contact || !contact.id) return setState(prev => {return {...prev, contact: null}})
     const { socket } = state
     socket.emit('seen', contact.id)
     let messages = state.messages
@@ -85,7 +85,7 @@ export function ChatProvider(props) {
   function onNewMessage(message) {
     const { socket, contact, messages } = state
     if(!messages) messages = [];
-    if(message.sender === contact.id) {
+    if(message.sender === contact?.id) {
       setState(prev => {return {...prev, typing: false}})
       socket.emit('seen', contact.id)
       message.seen = true
@@ -94,11 +94,11 @@ export function ChatProvider(props) {
   }
 
   function sendMessage(content) {
-    const { socket, account, contact } = state
+    const { socket, user, contact } = state
     if(!contact.id) return
       let message = {
         content: content,
-        sender: account.id,
+        sender: user.id,
         receiver: contact.id,
         date: new Date().getTime()
       }
@@ -108,7 +108,7 @@ export function ChatProvider(props) {
 
   function onTypingMessage(sender) {
     const { contact, typing } = state
-    if(contact.id != sender) return
+    if(contact?.id != sender) return
     setState(prev => {return {...prev, typing: sender}})
     clearTimeout(timeoutRef.current)
     timeoutRef.current = setTimeout(() => {
@@ -140,6 +140,7 @@ export function ChatProvider(props) {
   function onUpdateUser(user) {
     if(state.user.id === user.id) {
         setState(prev => { return {...prev, user} })
+        Auth.updateProfile(user)
         return;
     }
     let contacts = state.contacts.map(contact => {
@@ -147,11 +148,25 @@ export function ChatProvider(props) {
         return contact
     })
     setState(prev => { return {...prev, contacts} })
-    if(state.contact.id === user.id) setState(prev => { return {...prev, contact: user} })
+    if(state.contact?.id === user.id) setState(prev => { return {...prev, contact: user} })
+  }
+
+  function logout() {
+    state.socket.disconnect()
+    setState({
+      connected: false,
+      socket: null,
+      contact: null,
+      contacts: null,
+      messages: null,
+      user: null,
+      typing: false
+    })
+    Auth.logout()
   }
 
   return (
-    <ChatContext.Provider value={{...state, setCurrentContact, connect, sendMessage, sendType, status}}>
+    <ChatContext.Provider value={{...state, setCurrentContact, connect, sendMessage, sendType, status, logout}}>
       {props.children}
     </ChatContext.Provider>
   )

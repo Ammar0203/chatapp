@@ -47,7 +47,7 @@ export default function Register() {
                 <Error error={error} />
                 <Input value={name} name="name" onChange={onChange} placeholder="الاسم" required autoFocus />
                 <Input value={username} name="username" onChange={onChange} placeholder=" الاسم المستخدم" required/>
-                <Input value={password} name="password" onChange={onChange} placeholder="كلمة السر" required />
+                <Input value={password} name="password" type="password" onChange={onChange} placeholder="كلمة السر" required />
                 <Button color="primary" block className="mb-3">انشاء</Button>
                 <small><Link to="/login">تسجيل الدخول</Link></small>
                 <p className="m-3 text-muted">&copy; 2018-2019</p>

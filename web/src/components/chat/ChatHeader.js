@@ -24,7 +24,7 @@ const ChatHeader = props => {
     return (
         <Row className="heading m-0">
             <div onClick={props.toggle}>
-                <Avatar src={props.contact?.avatar} />
+                {props.contact? <Avatar src={props.contact?.avatar} /> : <></>}
             </div>
             <div className="text-right">
                 <div>{props.contact ? props.contact?.name : ''}</div>

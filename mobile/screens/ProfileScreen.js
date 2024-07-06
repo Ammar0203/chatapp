@@ -3,7 +3,7 @@ import { withChatContext } from "../context/ChatProvider";
 import { Header, Avatar } from "../components";
 import styles from "./styles/profile";
 import { Colors, Strings } from "../config";
-import { Text, View, useWindowDimensions } from "react-native";
+import { Image, StatusBar, Text, TouchableOpacity, View, useWindowDimensions } from "react-native";
 import useStyle from "./styles/profile";
 import { useHeight, useWidth } from "../api/Dimensions";
 
@@ -16,15 +16,18 @@ function ProfileScreen(props) {
   let contact = props.chat.contact;
   let status = props.chat.status();
   return (
-    <View>
-      <Header title={Strings.TITLE_PROFILE} />
+    <View style={{backgroundColor: Colors.WHITE, flex: 1}}>
+      <StatusBar backgroundColor={Colors.GRAY} barStyle='light-content' />
+      <Header title={Strings.TITLE_PROFILE} navigation={props.navigation} />
       <View>
         <View
           style={{
             backgroundColor: Colors.GRAY,
-            padding: h(4)
+            // padding: h(4)
+            paddingBottom: h(2)
           }}
         >
+          
           <View 
             style={{
               rowGap: h(2)
@@ -67,7 +70,7 @@ function ProfileScreen(props) {
             style={{
               alignSelf: "center",
               marginTop: 20,
-              fontSize: h(4),
+              fontSize: h(3),
             }}
           >
             {contact.about || Strings.DEFAULT_STATUS_MESSAGE}

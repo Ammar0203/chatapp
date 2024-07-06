@@ -79,7 +79,7 @@ export default function Chat() {
             return contact
         })
         setState(prev => { return {...prev, contacts} })
-        if(state.contact.id === user.id) setState(prev => { return {...prev, contact: user} })
+        if(state.contact?.id === user.id) setState(prev => { return {...prev, contact: user} })
     }
 
     function onTypingMessage(sender) {
@@ -164,13 +164,20 @@ export default function Chat() {
         )
     }
 
+    const [loadingError, setLoadingError] = useState(false)
+    useEffect(() => {
+        setTimeout(() => {
+            setLoadingError(true)
+        }, 5000)
+    }, [])
+
     if(!state.connected || !state.user || !state.contacts || !state.messages) {
         return <>
             <Spinner id="loader" color="success" />
-            <Card className="auth col-lg-3 col-sm-6">
+            {loadingError && <Card className="auth col-lg-3 col-sm-6">
                 ربما هناك عطل
                 <Button color="primary" block style={{margin: '10 10 10 10'}} className="mb-3" onClick={() => {Auth.logout(); navigate('/login')}} >خروج</Button>
-            </Card>
+            </Card>}
         </>
     }
 
